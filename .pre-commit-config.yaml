@@ -1,0 +1,35 @@
+minimum_pre_commit_version: "1.21"
+files: ^.*\.py$
+repos:
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        args: ["-c", "bandit.yaml"]
+  - repo: https://github.com/timothycrosley/isort
+    rev: 6.0.1
+    hooks:
+    - id: isort
+      additional_dependencies: [toml]
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+  - repo: https://github.com/PYCQA/flake8
+    rev: 7.3.0
+    hooks:
+      - id: flake8
+        exclude: ^.venv
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.17.1
+    hooks:
+    - id: mypy
+      additional_dependencies: [types-PyYAML]
+      # for args see https://mypy.readthedocs.io/en/stable/command_line.html
+      args: [
+          --no-strict-optional,
+          --ignore-missing-imports,
+          --allow-untyped-globals
+      ]
+default_language_version:
+    python: python3

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=70.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aerial_image_detection"
+version = "0.1"
+description = "Use computer vision models to detect objects in aerial imagery. "
+authors = [
+    {name = "Daan Bloembergen", email = "d.bloembergen@amsterdam.nl"},
+]
+maintainers = [
+    { name = "Computer Vision Team, Gemeente Amsterdam", email = "cvt@amsterdam.nl" },
+]
+readme = "README.md"
+requires-python = ">=3.8, <=3.12"
+dependencies = [
+    "geopandas>=1.1.0",
+    "numpy>=1.24.2",
+    "opencv-python>=4.6.0",
+    "sahi>=0.11.20",
+    "ultralytics>=8.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel>=6.29.4",
+    "matplotlib>=3.9.0",
+    "nbstripout>=0.7.1",
+    "pre-commit>=3.2.0",
+    "pytest>=7.0.1",
+    "pytest-cov>=4.0.0",
+    "safety>=3.2.4",
+]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
