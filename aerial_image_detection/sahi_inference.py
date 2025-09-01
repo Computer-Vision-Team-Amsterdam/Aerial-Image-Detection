@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import numpy as np
 import numpy.typing as npt
@@ -76,12 +76,14 @@ class SAHIInferenceModel:
         )
         return self.last_result
 
-    def get_obb_cls_and_boxes(
+    def get_prediction_data(
         self,
         result: Optional[PredictionResult] = None,
-    ) -> Tuple[List, List]:
+    ) -> Dict[str, List]:
         result = result or self.last_result
 
+        obb_cls = [int(pred.category.id) for pred in result.object_prediction_list]
+        obb_conf = [pred.score.value for pred in result.object_prediction_list]
         obb_boxes = np.concatenate(
             [
                 [
@@ -90,10 +92,14 @@ class SAHIInferenceModel:
                 ]
             ]
         ).tolist()
-        obb_cls = np.array(
-            [int(pred.category.id) for pred in result.object_prediction_list]
-        ).tolist()
-        return (obb_cls, obb_boxes)
+
+        data = {
+            "object_class": obb_cls,
+            "confidence": obb_conf,
+            "bounding_box": obb_boxes,
+        }
+
+        return data
 
     def get_names(self) -> Dict[int, str]:
         return self.detection_model.names
