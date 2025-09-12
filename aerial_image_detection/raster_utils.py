@@ -1,10 +1,12 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 import numpy.typing as npt
 import rasterio
 import shapely.geometry as sg
+from rasterio.mask import mask
 from rasterio.plot import reshape_as_image, show
+from rasterio.transform import array_bounds
 
 
 class RasterData:
@@ -51,13 +53,30 @@ class RasterData:
             return src.transform.to_shapely()
 
     def get_bounds_as_polygon(self) -> sg.Polygon:
-        bounds_poly = sg.box(
-            minx=self.bounds.left,
-            miny=self.bounds.bottom,
-            maxx=self.bounds.right,
-            maxy=self.bounds.top,
+        return sg.box(*tuple(self.bounds))
+
+    def get_crop(
+        self, bounds: Tuple[float, float, float, float]
+    ) -> Tuple[Optional[npt.NDArray], Optional[sg.Polygon]]:
+        crop_poly = sg.box(*bounds)
+        if not crop_poly.intersects(self.get_bounds_as_polygon()):
+            return None, None
+
+        with rasterio.open(self.file_path, "r") as src:
+            out_img, out_transform = mask(dataset=src, shapes=[crop_poly], crop=True)
+            out_poly = sg.box(
+                *array_bounds(out_img.shape[1], out_img.shape[2], out_transform)
+            )
+            return reshape_as_image(out_img), out_poly
+
+    def get_relative_crop(self, rel_bounds: Tuple[float, float, float, float]):
+        bounds = (
+            self.bounds.left + rel_bounds[0],
+            self.bounds.bottom + rel_bounds[1],
+            self.bounds.left + rel_bounds[2],
+            self.bounds.bottom + rel_bounds[3],
         )
-        return bounds_poly
+        return self.get_crop(bounds)
 
     def show(self):
         with rasterio.open(self.file_path, "r") as src:
