@@ -18,7 +18,8 @@ dependencies = [
     "geopandas>=1.1.0",
     "numpy>=1.24.2",
     "opencv-python>=4.6.0",
-    "rasterio",
+    "openpyxl>=3.1.5",
+    "rasterio>=1.4.3",
     "sahi>=0.11.20",
     "ultralytics>=8.3.0",
 ]
@@ -33,6 +34,9 @@ dev = [
     "pytest-cov>=4.0.0",
     "safety>=3.2.4",
 ]
+
+[tool.setuptools.packages.find]
+include=["aerial_image_detection"]
 
 [tool.isort]
 profile = "black"

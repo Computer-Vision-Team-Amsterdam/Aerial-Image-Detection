@@ -12,13 +12,14 @@ def plot_obb_boxes_on_image(
     obb_boxes: List,
     obb_names: Optional[Dict[int, str]] = None,
     single_color: Optional[Tuple[int, int, int]] = None,
+    line_width: int = 1,
 ) -> npt.NDArray:
     if obb_names is None:
         obb_names = defaultdict(str)
 
     ann = Annotator(
         im=np.ascontiguousarray(image),
-        line_width=None,  # default auto-size
+        line_width=line_width,  # default auto-size
         font_size=None,  # default auto-size
         font="Arial.ttf",  # must be ImageFont compatible
         pil=False,  # use PIL, otherwise uses OpenCV
