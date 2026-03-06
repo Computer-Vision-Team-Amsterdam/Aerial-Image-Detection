@@ -1,0 +1,38 @@
+customer: ""
+
+aml_experiment_details:
+  compute_name: gpu-inference-cluster
+  env_name: aerial_image_detection
+  env_version: 1
+  src_dir: "."
+
+inference:
+  inputs:
+    datastore_path: ""
+    inference_data_rel_path: ""
+    model_weights_rel_path: ""
+  outputs:
+    datastore_path: ""
+    output_rel_path: ""
+  model_params:
+    model_name: "yolo11m_obb.pt"
+    batch_size: 1  # batch size does not have an effect for SAHI
+    img_size: [1024, 1024]  # [height, width]
+    conf: 0.01
+  sahi_params:
+    model_type: "ultralytics"
+    slice_height: 1024
+    slice_width: 1024
+    overlap_height_ratio: 0.1
+    overlap_width_ratio: 0.1
+  target_classes: []
+  target_classes_conf: null  # null means conf is taken from model_params
+
+logging:
+  loglevel_own: INFO  # override loglevel for packages defined in `own_packages`
+  own_packages: ["__main__", "aerial_image_detection", "inference_step", "post_processing_step"]
+  basic_config:
+    # log config as arguments to `logging.basicConfig`
+    level: WARNING
+    format: "%(asctime)s|||%(levelname)-8s|%(name)s|%(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
