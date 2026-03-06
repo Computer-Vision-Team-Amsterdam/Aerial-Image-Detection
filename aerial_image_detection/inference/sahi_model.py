@@ -24,7 +24,7 @@ ALL_CLASSES = {
 }
 
 
-class SAHIInferenceModel:
+class SAHIModel:
 
     def __init__(
         self,
