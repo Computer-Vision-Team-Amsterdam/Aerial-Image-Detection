@@ -16,7 +16,6 @@ class RasterData:
         self.file_path = file_path
 
         with rasterio.open(file_path, "r") as src:
-            self.raster_img = src.read()
             self.description_str = RasterData._get_description(src)
             self.bounds = src.bounds
 
@@ -43,6 +42,10 @@ class RasterData:
         return self.description_str
 
     def as_rgb_img(self) -> npt.NDArray:
+        if self.raster_img is None:
+            with rasterio.open(self.file_path, "r") as src:
+                self.raster_img = src.read()
+
         return reshape_as_image(self.raster_img)
 
     def as_bgr_img(self):
