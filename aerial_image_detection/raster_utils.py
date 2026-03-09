@@ -60,17 +60,17 @@ class RasterData:
 
     def get_crop(
         self, bounds: Tuple[float, float, float, float]
-    ) -> Tuple[Optional[npt.NDArray], Optional[sg.Polygon]]:
+    ) -> Tuple[Optional[npt.NDArray], Optional[sg.Polygon], Optional[List[float]]]:
         crop_poly = sg.box(*bounds)
         if not crop_poly.intersects(self.get_bounds_as_polygon()):
-            return None, None
+            return None, None, None
 
         with rasterio.open(self.file_path, "r") as src:
             out_img, out_transform = mask(dataset=src, shapes=[crop_poly], crop=True)
             out_poly = sg.box(
                 *array_bounds(out_img.shape[1], out_img.shape[2], out_transform)
             )
-            return reshape_as_image(out_img), out_poly
+            return reshape_as_image(out_img), out_poly, out_transform.to_shapely()
 
     def get_relative_crop(self, rel_bounds: Tuple[float, float, float, float]):
         bounds = (
