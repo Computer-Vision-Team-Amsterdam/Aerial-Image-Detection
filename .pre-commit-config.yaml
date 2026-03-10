@@ -12,7 +12,7 @@ repos:
     - id: isort
       additional_dependencies: [toml]
   - repo: https://github.com/psf/black
-    rev: 26.1.0
+    rev: 26.3.0
     hooks:
       - id: black
   - repo: https://github.com/PYCQA/flake8
@@ -24,7 +24,7 @@ repos:
     rev: v1.19.1
     hooks:
     - id: mypy
-      additional_dependencies: [types-PyYAML]
+      additional_dependencies: [types-PyYAML, types-requests]
       # for args see https://mypy.readthedocs.io/en/stable/command_line.html
       args: [
           --no-strict-optional,
