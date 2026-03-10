@@ -31,17 +31,18 @@ class LoggingSpec(SettingsSpecModel):
 
 class InferenceModelParameters(SettingsSpecModel):
     model_name: str
-    batch_size: int = 1
-    img_size: Union[Tuple[int, int], int] = 640
-    conf: float = 0.5
+    device: str = "cuda:0"
+    img_size: Union[Tuple[int, int], int] = 1024
+    conf: float = 0.1
 
 
 class InferenceSAHIParameters(SettingsSpecModel):
     model_type: str = "ultralytics"
-    slice_height: int = 2048
-    slice_width: int = 2048
-    overlap_height_ratio: float = 0.2
-    overlap_width_ratio: float = 0.2
+    slice_height: int = 1024
+    slice_width: int = 1024
+    overlap_height_ratio: float = 0.1
+    overlap_width_ratio: float = 0.1
+    postprocess_class_agnostic: bool = True
 
 
 class InferenceSpec(SettingsSpecModel):

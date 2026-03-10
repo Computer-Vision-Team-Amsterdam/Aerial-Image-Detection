@@ -16,8 +16,8 @@ inference:
     model_weights_rel_path: ""
   model_params:
     model_name: "yolo11m_obb.pt"
-    batch_size: 1  # batch size does not have an effect for SAHI
-    img_size: [1024, 1024]  # [height, width]
+    device: "cpu"  # "cpu" or "cuda:0"
+    img_size: 1024
     conf: 0.01
   sahi_params:
     model_type: "ultralytics"
@@ -25,9 +25,10 @@ inference:
     slice_width: 1024
     overlap_height_ratio: 0.1
     overlap_width_ratio: 0.1
+    postprocess_class_agnostic: true
   target_area:
     buurt: "Waterloopleinbuurt"
-  target_classes: []
+  target_classes: [9, 10]
   target_classes_conf: null  # null means conf is taken from model_params
 
 logging:
