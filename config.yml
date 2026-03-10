@@ -7,13 +7,13 @@ aml_experiment_details:
   src_dir: "."
 
 inference:
-  inputs:
-    datastore_path: ""
+  input_folder:
+    datastore: ""
     inference_data_rel_path: ""
-    model_weights_rel_path: ""
-  outputs:
-    datastore_path: ""
+  project_folder:
+    datastore: ""
     output_rel_path: ""
+    model_weights_rel_path: ""
   model_params:
     model_name: "yolo11m_obb.pt"
     batch_size: 1  # batch size does not have an effect for SAHI
@@ -25,6 +25,8 @@ inference:
     slice_width: 1024
     overlap_height_ratio: 0.1
     overlap_width_ratio: 0.1
+  target_area:
+    buurt: "Waterloopleinbuurt"
   target_classes: []
   target_classes_conf: null  # null means conf is taken from model_params
 

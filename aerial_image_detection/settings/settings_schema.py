@@ -45,10 +45,11 @@ class InferenceSAHIParameters(SettingsSpecModel):
 
 
 class InferenceSpec(SettingsSpecModel):
-    inputs: Dict[str, str]
-    outputs: Dict[str, str]
+    input_folder: Dict[str, str]
+    project_folder: Dict[str, str]
     model_params: InferenceModelParameters
     sahi_params: InferenceSAHIParameters
+    target_area: Dict[str, str] = {"gemeente": "Amsterdam"}
     target_classes: List[int] = None
     target_classes_conf: Optional[float] = None
 
