@@ -29,7 +29,7 @@ class SAHIModel:
     def __init__(
         self,
         yolo_model_weights_path: str,
-        confidenc_treshold: float = 0.3,
+        confidence_treshold: float = 0.3,
         image_size: int = 1024,
         device: str = "cpu",
         slice_height: Optional[int] = None,
@@ -42,7 +42,7 @@ class SAHIModel:
         self.detection_model = AutoDetectionModel.from_pretrained(
             model_type="ultralytics",
             model_path=yolo_model_weights_path,  # any yolov8/yolov9/yolo11/yolo12/rt-detr det model is supported  # noqa: E501
-            confidence_threshold=confidenc_treshold,
+            confidence_threshold=confidence_treshold,
             device=device,  # or 'cuda:0' if GPU is available
             image_size=image_size,
         )
