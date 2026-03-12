@@ -28,6 +28,10 @@ inference:
     postprocess_class_agnostic: true
   target_area:
     buurt: "Waterloopleinbuurt"
+    # wijk: "Nieuwmarkt/Lastage"
+    # stadsdeel: "Centrum"
+    # gemeente: "Amsterdam"
+  target_area_buffer: 10
   target_classes: [9, 10]
   target_classes_conf: null  # null means conf is taken from model_params
 
