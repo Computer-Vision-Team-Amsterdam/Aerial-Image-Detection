@@ -32,8 +32,8 @@ inference:
   target_classes_conf: null  # null means conf is taken from model_params
 
 logging:
-  loglevel_own: INFO  # override loglevel for packages defined in `own_packages`
-  own_packages: ["__main__", "aerial_image_detection", "inference_step", "post_processing_step"]
+  loglevel_own: DEBUG  # override loglevel for packages defined in `own_packages`
+  own_packages: ["__main__", "aerial_image_detection"]
   basic_config:
     # log config as arguments to `logging.basicConfig`
     level: WARNING

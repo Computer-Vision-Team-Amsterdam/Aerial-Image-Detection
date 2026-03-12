@@ -3,7 +3,8 @@ import json
 import geopandas as gpd
 import requests
 
-from aerial_image_detection import RD_CRS, WGS84_CRS
+from aerial_image_detection import logger
+from aerial_image_detection.constants import RD_CRS, WGS84_CRS
 
 
 class CityAreaHandler:
@@ -55,7 +56,7 @@ class CityAreaHandler:
             )
 
         url = f"https://api.data.amsterdam.nl/v1/gebieden/{scale}?_format=geojson"
-        print(f"Querying gebieden API for {scale}...")
+        logger.info(f"Querying gebieden API for {scale}...")
         try:
             result = requests.get(url, timeout=5)
             result.raise_for_status()
@@ -63,10 +64,10 @@ class CityAreaHandler:
             city_area_gdf = gpd.GeoDataFrame.from_features(
                 features=json.loads(result.content), crs=WGS84_CRS
             ).to_crs(RD_CRS)
-            print(f"Query successful, {len(city_area_gdf)} {scale} returned.")
+            logger.debug(f"Query successful, {len(city_area_gdf)} {scale} returned.")
             return city_area_gdf
         except requests.exceptions.RequestException as e:
-            print(f"Error querying gebieden API: {e}")
+            logger.error(f"Error querying gebieden API: {e}")
             raise e
 
     def get_city_area_gdf(self) -> gpd.GeoDataFrame:

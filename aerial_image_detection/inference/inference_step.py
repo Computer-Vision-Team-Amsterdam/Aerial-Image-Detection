@@ -1,4 +1,3 @@
-import logging
 import os
 import sys
 
@@ -7,10 +6,10 @@ from mldesigner import Input, Output, command_component
 
 sys.path.append("../../..")
 
-from aerial_image_detection import settings  # noqa: E402
-from aerial_image_detection.inference import AerialImageInference  # noqa: E402
-
-logger = logging.getLogger("inference_step")
+from aerial_image_detection import logger, settings  # noqa: E402
+from aerial_image_detection.inference.aerial_image_inference import (  # noqa: E402
+    AerialImageInference,
+)
 
 aml_experiment_settings = settings["aml_experiment_details"]
 
@@ -42,7 +41,11 @@ def run_inference(
         this can be annotation labels as .txt files, images with blurred
         sensitive classes and bounding boxes, or both.
     """
+    logger.info("Starting inference step.")
+
     inference_settings = settings["inference"]
+    logger.debug("Inference settings from config.yml:")
+    logger.debug(inference_settings)
 
     inference_step = AerialImageInference(
         images_folder=inference_data_dir,

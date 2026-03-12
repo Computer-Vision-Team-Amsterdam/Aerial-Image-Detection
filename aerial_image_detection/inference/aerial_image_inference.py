@@ -3,8 +3,8 @@ from typing import Dict, Optional
 import geopandas as gpd
 from shapely.geometry import Polygon
 
-from aerial_image_detection.inference import SAHIModel
-from aerial_image_detection.utils import CityAreaHandler
+from aerial_image_detection.inference.sahi_model import SAHIModel
+from aerial_image_detection.utils.city_area_handler import CityAreaHandler
 
 
 class AerialImageInference:
