@@ -1,11 +1,13 @@
-from aerial_image_detection import aml_interface, settings
+from aml_interface.aml_interface import AMLInterface
+
+from aerial_image_detection import settings
 
 
 def main():
     """
     This file creates an AML environment.
     """
-    aml_interface.create_aml_environment(
+    AMLInterface().create_aml_environment(
         env_name=settings["aml_experiment_details"]["env_name"],
         build_context_path="aerial_image_detection/create_aml_environment",
         dockerfile_path="Dockerfile",

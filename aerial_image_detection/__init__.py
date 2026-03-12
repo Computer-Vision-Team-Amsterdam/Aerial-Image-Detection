@@ -1,13 +1,9 @@
 import logging
 import os
 
-from aml_interface.aml_interface import AMLInterface
-
 from aerial_image_detection.settings import AerialImageDetectionSettings
 
 logger = logging.getLogger("inference_pipeline")
-
-aml_interface = AMLInterface()
 
 config_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "config.yml")
