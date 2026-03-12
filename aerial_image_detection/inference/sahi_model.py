@@ -5,23 +5,7 @@ import numpy.typing as npt
 from sahi import AutoDetectionModel
 from sahi.predict import PredictionResult, get_sliced_prediction
 
-ALL_CLASSES = {
-    0: "plane",
-    1: "ship",
-    2: "storage tank",
-    3: "baseball diamond",
-    4: "tennis court",
-    5: "basketball court",
-    6: "ground track field",
-    7: "harbor",
-    8: "bridge",
-    9: "large vehicle",
-    10: "small vehicle",
-    11: "helicopter",
-    12: "roundabout",
-    13: "soccer ball field",
-    14: "swimming pool",
-}
+from aerial_image_detection.constants import OBB_CLASSES
 
 
 class SAHIModel:
@@ -55,7 +39,7 @@ class SAHIModel:
         if classes_to_keep is not None:
             self.classes_to_exclude = [
                 class_id
-                for class_id in ALL_CLASSES.keys()
+                for class_id in OBB_CLASSES.keys()
                 if class_id not in classes_to_keep
             ]
         else:
