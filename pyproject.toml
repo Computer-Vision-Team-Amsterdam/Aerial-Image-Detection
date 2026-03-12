@@ -18,7 +18,9 @@ dependencies = [
     "aml_interface",
     "azure-storage-blob>=12.23",
     "cvtoolkit",
+    "contextily",
     "geopandas>=1.1.0",
+    "matplotlib>=3.9.0",
     "mldesigner>=0.1.0b16",
     "numpy>=1.24.2",
     "opencv-python>=4.6.0",
@@ -31,9 +33,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "azure-identity-broker",
-    "contextily",
     "ipykernel>=6.29.4",
-    "matplotlib>=3.9.0",
     "nbstripout>=0.7.1",
     "pre-commit>=3.2.0",
     "pytest>=7.0.1",

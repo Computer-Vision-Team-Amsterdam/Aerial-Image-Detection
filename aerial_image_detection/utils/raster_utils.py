@@ -51,6 +51,9 @@ class RasterData:
     def as_bgr_img(self):
         return np.flip(self.as_rgb_img(), 2)
 
+    def get_image(self) -> npt.NDArray:
+        return self.as_rgb_img()
+
     def get_shapely_transform(self) -> List[float]:
         with rasterio.open(self.file_path, "r") as src:
             return src.transform.to_shapely()

@@ -47,6 +47,8 @@ def run_inference(
     logger.debug("Inference settings from config.yml:")
     logger.debug(inference_settings)
 
+    os.makedirs(output_dir, exist_ok=True)
+
     inference_step = AerialImageInference(
         images_folder=inference_data_dir,
         output_folder=output_dir,
