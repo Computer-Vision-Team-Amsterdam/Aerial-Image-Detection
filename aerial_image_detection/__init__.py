@@ -13,3 +13,6 @@ try:
     settings = AerialImageDetectionSettings.get_settings()
 except FileNotFoundError:
     logger.warning(f"Config file `{config_path}` for AerialImageDetection not found.")
+
+RD_CRS = "EPSG:28992"
+WGS84_CRS = "EPSG:4326"

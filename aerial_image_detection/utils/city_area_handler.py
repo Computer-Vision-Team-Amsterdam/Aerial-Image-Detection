@@ -3,14 +3,13 @@ import json
 import geopandas as gpd
 import requests
 
+from aerial_image_detection import RD_CRS, WGS84_CRS
+
 
 class CityAreaHandler:
     """
     Query the API for city area geometries and process the results.
     """
-
-    RD_CRS = "EPSG:28992"
-    WGS84_CRS = "EPSG:4326"
 
     def __init__(self) -> None:
         self._query_and_process_stadsdelen()
@@ -62,8 +61,8 @@ class CityAreaHandler:
             result.raise_for_status()
 
             city_area_gdf = gpd.GeoDataFrame.from_features(
-                features=json.loads(result.content), crs=cls.WGS84_CRS
-            ).to_crs(cls.RD_CRS)
+                features=json.loads(result.content), crs=WGS84_CRS
+            ).to_crs(RD_CRS)
             print(f"Query successful, {len(city_area_gdf)} {scale} returned.")
             return city_area_gdf
         except requests.exceptions.RequestException as e:
