@@ -227,7 +227,7 @@ class AerialImageInference:
 
         logger.debug(
             f"Found {len(images)} images in input folder, "
-            f"of which {sum(image_gdf["in_target_area"])} intersect with target area."
+            f"of which {sum(image_gdf['in_target_area'])} intersect with target area."
         )
 
         return image_gdf
