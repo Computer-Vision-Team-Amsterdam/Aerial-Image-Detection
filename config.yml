@@ -1,9 +1,10 @@
 customer: ""
 
 aml_experiment_details:
+  experiment_name: "parkeren_rvv"
   compute_name: gpu-inference-cluster
   env_name: aerial_image_detection
-  env_version: 1
+  env_version: 2
   src_dir: "."
 
 inference:

@@ -9,10 +9,11 @@ class SettingsSpecModel(BaseModel):
 
 
 class AMLExperimentDetailsSpec(SettingsSpecModel):
-    compute_name: str = None
-    env_name: str = None
-    env_version: int = None
-    src_dir: str = None
+    experiment_name: str
+    compute_name: str
+    env_name: str
+    env_version: int
+    src_dir: str
 
 
 class LoggingSpec(SettingsSpecModel):
