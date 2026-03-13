@@ -164,6 +164,7 @@ class AerialImageInference:
 
     def _plot_image_gdf(self, file_path: str) -> None:
         PLOT_CRS = "EPSG:3857"
+        TILE_URL = "https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png"
 
         target_shape_gdf = gpd.GeoDataFrame(
             data={"geometry": [self.target_polygon]}, crs=RD_CRS
@@ -176,7 +177,7 @@ class AerialImageInference:
             PLOT_CRS
         ).boundary.plot(ax=ax, edgecolor="red")
         target_shape_gdf.to_crs(PLOT_CRS).boundary.plot(ax=ax, edgecolor="black")
-        cx.add_basemap(ax)
+        cx.add_basemap(ax, source=TILE_URL)
 
         extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
         fig.savefig(file_path, bbox_inches=extent, dpi=150)
