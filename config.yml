@@ -1,10 +1,10 @@
 customer: ""
 
 aml_experiment_details:
-  experiment_name: "parkeren_rvv"
+  experiment_name: "aerial_image_detection"
   compute_name: gpu-inference-cluster
   env_name: aerial_image_detection
-  env_version: 2
+  env_version: 3
   src_dir: "."
 
 inference:
@@ -17,7 +17,7 @@ inference:
     model_weights_rel_path: ""
   model_params:
     model_name: "yolo11m_obb.pt"
-    device: "cpu"  # "cpu" or "cuda:0"
+    device: "cuda:0"  # "cpu" or "cuda:0"
     img_size: 1024
     conf: 0.01
   sahi_params:
