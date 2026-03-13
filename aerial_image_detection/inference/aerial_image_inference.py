@@ -14,7 +14,7 @@ from aerial_image_detection.inference.sahi_model import SAHIModel
 from aerial_image_detection.utils.city_area_handler import CityAreaHandler
 from aerial_image_detection.utils.raster_utils import RasterData
 
-IMG_FORMATS = ".tif"
+IMG_FORMATS = [".tif"]
 
 
 class Row(NamedTuple):
@@ -194,11 +194,18 @@ class AerialImageInference:
 
         logger.debug(f"Analyzing and filtering input images in {self.images_folder}...")
 
+        allowed_suffixes = self.settings["input_folder"].get(
+            "inference_data_suffixes", IMG_FORMATS
+        )
+        if isinstance(allowed_suffixes, str):
+            allowed_suffixes = [allowed_suffixes]
+        logger.debug(f"Allowed suffixes: {allowed_suffixes}")
+
         images = sorted(
             [
                 filename
                 for filename in os.listdir(self.images_folder)
-                if any(filename.endswith(ext) for ext in IMG_FORMATS)
+                if any(filename.endswith(ext) for ext in allowed_suffixes)
             ]
         )
         image_gdf = gpd.GeoDataFrame(
