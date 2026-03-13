@@ -4,7 +4,7 @@ import sys
 from azure.ai.ml.constants import AssetTypes
 from mldesigner import Input, Output, command_component
 
-sys.path.append("../../..")
+sys.path.append("../..")
 
 from aerial_image_detection import logger, settings  # noqa: E402
 from aerial_image_detection.inference.aerial_image_inference import (  # noqa: E402
@@ -18,7 +18,7 @@ aml_experiment_settings = settings["aml_experiment_details"]
     name="inference_step",
     display_name="Run inference using SAHI and YOLO model.",
     environment=f"azureml:{aml_experiment_settings['env_name']}:{aml_experiment_settings['env_version']}",
-    code="../../../",
+    code="../../",
     is_deterministic=False,
 )
 def run_inference(
