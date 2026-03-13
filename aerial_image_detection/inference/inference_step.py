@@ -53,7 +53,7 @@ def run_inference(
         images_folder=inference_data_dir,
         output_folder=output_dir,
         model_path=os.path.join(
-            model_weights_dir, inference_settings["inputs"]["model_name"]
+            model_weights_dir, inference_settings["model_params"]["model_name"]
         ),
         inference_settings=inference_settings,
     )
