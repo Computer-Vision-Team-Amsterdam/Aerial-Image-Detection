@@ -30,6 +30,18 @@ class LoggingSpec(SettingsSpecModel):
     ai_instrumentation_key: Optional[str] = None
 
 
+class InputParameters(SettingsSpecModel):
+    datastore: str
+    inference_data_rel_path: str
+    allowed_suffixes: Optional[List[str]] = None
+
+
+class OutputParameters(SettingsSpecModel):
+    datastore: str
+    output_rel_path: str
+    model_weights_rel_path: str
+
+
 class InferenceModelParameters(SettingsSpecModel):
     model_name: str
     device: str = "cuda:0"
@@ -47,8 +59,8 @@ class InferenceSAHIParameters(SettingsSpecModel):
 
 
 class InferenceSpec(SettingsSpecModel):
-    input_folder: Dict[str, str]
-    project_folder: Dict[str, str]
+    input_folder: InputParameters
+    project_folder: OutputParameters
     model_params: InferenceModelParameters
     sahi_params: InferenceSAHIParameters
     target_area: Dict[str, str] = {"gemeente": "Amsterdam"}

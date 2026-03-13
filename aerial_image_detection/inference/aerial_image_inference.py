@@ -195,7 +195,7 @@ class AerialImageInference:
         logger.debug(f"Analyzing and filtering input images in {self.images_folder}...")
 
         allowed_suffixes = self.settings["input_folder"].get(
-            "inference_data_suffixes", IMG_FORMATS
+            "allowed_suffixes", IMG_FORMATS
         )
         if isinstance(allowed_suffixes, str):
             allowed_suffixes = [allowed_suffixes]
