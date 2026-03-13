@@ -82,6 +82,9 @@ class AerialImageInference:
             image = raster_data.get_image()
             transform = raster_data.get_shapely_transform()
 
+        n_slices = self.sahi_model.get_number_of_slices_for_image(image=image)
+        logger.debug(f"Performing prediction on {n_slices} slices.")
+
         sahi_result = self.sahi_model.predict(image=image)
 
         total_time = sum(sahi_result.durations_in_seconds.values())

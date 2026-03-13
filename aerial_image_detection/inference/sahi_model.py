@@ -4,6 +4,7 @@ import numpy as np
 import numpy.typing as npt
 from sahi import AutoDetectionModel
 from sahi.predict import PredictionResult, get_sliced_prediction
+from sahi.slicing import get_slice_bboxes
 
 from aerial_image_detection.constants import OBB_CLASSES
 
@@ -34,7 +35,7 @@ class SAHIModel:
         self.slice_height = slice_height or image_size
         self.slice_width = slice_width or image_size
         self.overlap_height_ratio = overlap_height_ratio
-        self.ooverlap_width_ratio = overlap_width_ratio
+        self.overlap_width_ratio = overlap_width_ratio
 
         if classes_to_keep is not None:
             self.classes_to_exclude = [
@@ -54,9 +55,10 @@ class SAHIModel:
             slice_height=self.slice_height,
             slice_width=self.slice_width,
             overlap_height_ratio=self.overlap_height_ratio,
-            overlap_width_ratio=self.ooverlap_width_ratio,
+            overlap_width_ratio=self.overlap_width_ratio,
             exclude_classes_by_id=self.classes_to_exclude,
             postprocess_class_agnostic=self.class_agnostic,
+            verbose=0,
         )
         return self.last_result
 
@@ -87,3 +89,14 @@ class SAHIModel:
 
     def get_names(self) -> Dict[int, str]:
         return self.detection_model.names
+
+    def get_number_of_slices_for_image(self, image: npt.NDArray) -> int:
+        slice_boxes = get_slice_bboxes(
+            image_height=image.shape[0],
+            image_width=image.shape[1],
+            slice_height=self.slice_height,
+            slice_width=self.slice_width,
+            overlap_height_ratio=self.overlap_height_ratio,
+            overlap_width_ratio=self.overlap_width_ratio,
+        )
+        return len(slice_boxes)
