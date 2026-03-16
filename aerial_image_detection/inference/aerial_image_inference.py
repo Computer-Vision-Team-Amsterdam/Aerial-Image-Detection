@@ -71,6 +71,10 @@ class AerialImageInference:
             detections_output_folder, detections_file_list
         )
         logger.info(f"Detections merged and written to {detections_file}")
+
+        logger.info("Cleaning up temporary files...")
+        self._cleanup_detection_files(detections_file_list)
+
         return detections_file
 
     def _process_row(self, detections_output_folder: str, row: Row) -> str:
@@ -131,6 +135,14 @@ class AerialImageInference:
         )
         target_area_detections.to_file(output_file_path, driver="GeoJSON", index=True)
         return output_file_path
+
+    def _cleanup_detection_files(self, detections_file_list: List[str]) -> None:
+        for detection_file in detections_file_list:
+            try:
+                os.remove(detection_file)
+            except Exception as e:
+                logger.error(f"Failed to remove file '{detection_file}': {str(e)}")
+                raise Exception(f"Failed to remove file '{detection_file}': {e}")
 
     def _setup_inference_model(self, model_path: str) -> SAHIModel:
         logger.info(f"Loading SAHI model at {model_path}...")
