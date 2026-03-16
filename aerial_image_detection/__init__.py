@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Optional
 
 from aerial_image_detection.settings import AerialImageDetectionSettings
 from aerial_image_detection.utils.logging_utils import LoggingConfigurer
@@ -19,3 +20,10 @@ logging_configurer = LoggingConfigurer(settings["logging"])
 logging_configurer.setup_logging()
 
 logger = logging.getLogger("aerial_image_detection")
+
+
+def get_logger(child_name: Optional[str] = None) -> logging.Logger:
+    if child_name is not None:
+        return logger.getChild(child_name)
+    else:
+        return logger
