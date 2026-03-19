@@ -4,6 +4,7 @@ import tempfile
 import time
 from typing import List, Optional
 
+import geopandas as gpd
 import requests
 from shapely.geometry.base import BaseGeometry
 
@@ -32,7 +33,9 @@ class PDOKDownloader:
         features: List[str],
         area: BaseGeometry,
         download_dir: str,
+        extract_bgt_functions: Optional[dict[str, List[str]]] = None,
         suffix: Optional[str] = None,
+        extension: Optional[str] = None,
     ) -> List[str]:
         post_data = {
             "featuretypes": features,
@@ -84,6 +87,68 @@ class PDOKDownloader:
             url=download_url, download_dir=download_dir, suffix=suffix
         )
 
+        output_files = []
+
+        if extract_bgt_functions is not None:
+            logger.info("Cropping results to area and extracting bgt functions...")
+        else:
+            logger.info("Cropping results to area...")
+        for file in extracted_files:
+            cropped_files = self._crop_and_extract(
+                file_path=os.path.join(download_dir, file),
+                target_shape=area,
+                extension=extension,
+                extract_bgt_functions=extract_bgt_functions,
+            )
+            output_files.extend(cropped_files)
+
+        return output_files
+
+    @classmethod
+    def _crop_and_extract(
+        cls,
+        file_path: str,
+        target_shape: BaseGeometry,
+        extension: Optional[str] = None,
+        extract_bgt_functions: Optional[dict[str, List[str]]] = None,
+    ) -> List[str]:
+        gdf = gpd.read_file(file_path)
+        gdf_cropped = gdf[gdf.intersects(target_shape)]
+
+        if extension is not None:
+            os.remove(file_path)
+            path, _ = os.path.splitext(file_path)
+            file_path = f"{path}{extension}"
+
+        gdf_cropped.to_file(filename=file_path)
+
+        output_files = [file_path]
+
+        if extract_bgt_functions is not None:
+            extracted_files = cls._extract_bgt_functions(
+                file_path, extract_bgt_functions
+            )
+            output_files.extend(extracted_files)
+
+        return output_files
+
+    @classmethod
+    def _extract_bgt_functions(
+        cls, file_path: str, extract_bgt_functions: dict[str, List[str]]
+    ):
+        extracted_files = []
+        gdf = gpd.read_file(file_path)
+        for group_name, functions in extract_bgt_functions.items():
+            logger.debug(f"Extracting functions {functions} to {group_name}...")
+            group_gdf = gdf[gdf["function"].isin(functions)]
+            logger.debug(f"Found {len(group_gdf)} items.")
+
+            path, ext = os.path.splitext(file_path)
+            group_file_path = f"{path}_{group_name}{ext}"
+            group_gdf.to_file(filename=group_file_path)
+            logger.debug(f"Result saved in {group_file_path}")
+
+            extracted_files.append(group_file_path)
         return extracted_files
 
     @classmethod
