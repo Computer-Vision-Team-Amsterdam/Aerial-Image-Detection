@@ -35,11 +35,13 @@ dependencies = [
 dev = [
     "azure-identity-broker",
     "ipykernel>=6.29.4",
+    "ipywidgets",
     "nbstripout>=0.7.1",
     "pre-commit>=3.2.0",
     "pytest>=7.0.1",
     "pytest-cov>=4.0.0",
     "safety>=3.2.4",
+    "tqdm>=4.9.0",
 ]
 
 [tool.uv.sources]
