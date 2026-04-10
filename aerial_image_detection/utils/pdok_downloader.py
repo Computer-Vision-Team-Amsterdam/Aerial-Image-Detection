@@ -36,7 +36,13 @@ class PDOKDownloader:
         extract_bgt_functions: Optional[dict[str, List[str]]] = None,
         suffix: Optional[str] = None,
         extension: Optional[str] = None,
-    ) -> List[str]:
+    ) -> dict[str, str]:
+
+        if len(features) > 1 and extract_bgt_functions is not None:
+            raise AttributeError(
+                "Extracting bgt_functions from multiple features is currently not supported."
+            )
+
         post_data = {
             "featuretypes": features,
             "format": "citygml",
@@ -87,7 +93,7 @@ class PDOKDownloader:
             url=download_url, download_dir=download_dir, suffix=suffix
         )
 
-        output_files = []
+        output_files: dict[str, str] = dict()
 
         if extract_bgt_functions is not None:
             logger.info("Cropping results to area and extracting bgt functions...")
@@ -100,7 +106,7 @@ class PDOKDownloader:
                 extension=extension,
                 extract_bgt_functions=extract_bgt_functions,
             )
-            output_files.extend(cropped_files)
+            output_files.update(cropped_files)
 
         return output_files
 
@@ -111,32 +117,31 @@ class PDOKDownloader:
         target_shape: BaseGeometry,
         extension: Optional[str] = None,
         extract_bgt_functions: Optional[dict[str, List[str]]] = None,
-    ) -> List[str]:
+    ) -> dict[str, str]:
         gdf = gpd.read_file(file_path)
         gdf_cropped = gdf[gdf.intersects(target_shape)]
 
         if extension is not None:
             os.remove(file_path)
             path, _ = os.path.splitext(file_path)
+            if os.path.exists(f"{path}.gfs"):
+                os.remove(f"{path}.gfs")
             file_path = f"{path}{extension}"
 
         gdf_cropped.to_file(filename=file_path)
 
-        output_files = [file_path]
-
         if extract_bgt_functions is not None:
-            extracted_files = cls._extract_bgt_functions(
-                file_path, extract_bgt_functions
-            )
-            output_files.extend(extracted_files)
+            output_files = cls._extract_bgt_functions(file_path, extract_bgt_functions)
+        else:
+            output_files = {"all": file_path}
 
         return output_files
 
     @classmethod
     def _extract_bgt_functions(
         cls, file_path: str, extract_bgt_functions: dict[str, List[str]]
-    ):
-        extracted_files = []
+    ) -> dict[str, str]:
+        extracted_files: dict[str, str] = dict()
         gdf = gpd.read_file(file_path)
         for group_name, functions in extract_bgt_functions.items():
             logger.debug(f"Extracting functions {functions} to {group_name}...")
@@ -148,7 +153,10 @@ class PDOKDownloader:
             group_gdf.to_file(filename=group_file_path)
             logger.debug(f"Result saved in {group_file_path}")
 
-            extracted_files.append(group_file_path)
+            extracted_files[group_name] = group_file_path
+
+        os.remove(file_path)
+
         return extracted_files
 
     @classmethod
