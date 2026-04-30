@@ -13,7 +13,7 @@ maintainers = [
     { name = "Computer Vision Team, Gemeente Amsterdam", email = "cvt@amsterdam.nl" },
 ]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 dependencies = [
     "aml_interface",
     "azure-storage-blob>=12.23",
