@@ -7,7 +7,7 @@ repos:
       - id: bandit
         args: ["-c", "bandit.yaml"]
   - repo: https://github.com/timothycrosley/isort
-    rev: 8.0.1
+    rev: 9.0.0a3
     hooks:
     - id: isort
       additional_dependencies: [toml]
@@ -21,7 +21,7 @@ repos:
       - id: flake8
         exclude: ^.venv
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+    rev: v1.20.2
     hooks:
     - id: mypy
       additional_dependencies: [types-PyYAML, types-requests]
