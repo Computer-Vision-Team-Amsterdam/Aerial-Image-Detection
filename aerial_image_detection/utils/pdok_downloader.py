@@ -17,6 +17,27 @@ REQUEST_TIMEOUT = 30
 
 
 class PDOKDownloader:
+    """
+    Helper class that talks to the [PDOK Swagger
+    API](https://api.pdok.nl/lv/bgt/download/v1_0/ui/#/) and downloads BGT data
+    for a given target area.
+
+    Usage
+    -----
+
+    ```
+        pdok_downloader = PDOKDownloader()
+
+        files = pdok_downloader.download_features_for_area(
+            features=...,
+            area=...,
+            download_dir=...,
+            extract_bgt_functions=...,
+            suffix=...,
+            extension=...,
+        )
+    ```
+    """
 
     POST_URL = "https://api.pdok.nl/lv/bgt/download/v1_0/full/custom"
     POST_HEADERS = {"accept": "application/json", "Content-Type": "application/json"}
@@ -37,6 +58,39 @@ class PDOKDownloader:
         suffix: Optional[str] = None,
         extension: Optional[str] = None,
     ) -> dict[str, str]:
+        """
+        Download the required features for a given area.
+
+        Parameters
+        ----------
+        features: List[str]
+            A list of BGT features, e.g.
+            ```
+                features = ["wegdeel"]
+            ```
+        area: BaseGeometry
+            The area for which BGT will be downloaded.
+        download_dir: str
+            The location where downloaded files will be stored.
+        extract_bgt_functions: Optional[dict[str, List[str]]] = None
+            Optional: generate separate files for different groups of BGT
+            functions, e.g.
+            ```
+                extract_bgt_functions = {
+                    "parkeervlakken": ["parkeervlak"],
+                    "ontheffinggebied": ["voetpad", "fietspad", "voetpad op trap", "voetgangersgebied"],
+                }
+            ```
+        suffix: Optional[str] = None
+            Optional: suffix for downloaded files.
+        extension: Optional[str] = None
+            Optional: file format to convert the download to. If not specified,
+            downloads with be GML files.
+
+        Returns
+        -------
+        A dict with for each generated file the download location.
+        """
 
         if len(features) > 1 and extract_bgt_functions is not None:
             raise AttributeError(
@@ -119,6 +173,8 @@ class PDOKDownloader:
         extract_bgt_functions: Optional[dict[str, List[str]]] = None,
     ) -> dict[str, str]:
         gdf = gpd.read_file(file_path)
+
+        # We crop explicitly since PDOK returns a slightly bigger area than requested.
         gdf_cropped = gdf[gdf.intersects(target_shape)]
 
         if extension is not None:
@@ -172,7 +228,7 @@ class PDOKDownloader:
     ) -> List[str]:
         extracted_files = []
         with tempfile.TemporaryDirectory() as tmpdirname:
-            with tempfile.NamedTemporaryFile(
+            with tempfile.NamedTemporaryFile(  # type: ignore
                 delete_on_close=False, suffix=".zip"
             ) as fp:
                 cls._download_file(url=url, file_path=fp.name)
