@@ -34,7 +34,7 @@ class AerialImageInference:
         model_path: str,
         inference_settings: Dict,
     ):
-        self.run_timestamp = datetime.now().strftime(format="%Y-%m-%dT%H-%M-%S")
+        self.run_timestamp = datetime.now().strftime(format="%Y-%m-%dT%H-%M-%S")  # type: ignore
         self.images_folder = images_folder
         self.output_folder = output_folder
         self.settings = inference_settings
@@ -113,9 +113,9 @@ class AerialImageInference:
 
         output_file_path = os.path.join(
             detections_output_folder,
-            f"{os.path.splitext(row.filename)[0]}.geojson",
+            f"{os.path.splitext(row.filename)[0]}.gpkg",
         )
-        detections_gdf.to_file(output_file_path, driver="GeoJSON")
+        detections_gdf.to_file(output_file_path, driver="GPKG")
         return output_file_path
 
     def _merge_and_write_detections(
@@ -131,9 +131,9 @@ class AerialImageInference:
         target_area_detections.reset_index(inplace=True, drop=True)
 
         output_file_path = os.path.join(
-            detections_output_folder, "combined_detections_in_target_area.geojson"
+            detections_output_folder, "combined_detections_in_target_area.gpkg"
         )
-        target_area_detections.to_file(output_file_path, driver="GeoJSON", index=True)
+        target_area_detections.to_file(output_file_path, driver="GPKG", index=True)
         return output_file_path
 
     def _cleanup_detection_files(self, detections_file_list: List[str]) -> None:
