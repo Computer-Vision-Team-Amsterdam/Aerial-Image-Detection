@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/azureml/openmpi5.0-cuda12.4-ubuntu22.04 AS base-image
+FROM mcr.microsoft.com/azureml/openmpi5.0-cuda12.8-ubuntu24.04 AS base-image
 
 # Upgrade and install system libraries
 RUN apt update -y \
@@ -19,4 +19,4 @@ RUN pip install uv
 COPY pyproject.toml .
 
 # Install requirements
-RUN uv pip install --system -r pyproject.toml
+RUN uv pip install --system -r pyproject.toml --extra torch_aml
