@@ -42,10 +42,20 @@ dev = [
     "pytest-cov>=4.0.0",
     "safety>=3.2.4",
 ]
+torch_aml = [
+    "torch",
+    "torchvision",
+]
 
 [tool.uv.sources]
 aml_interface = { git = "https://github.com/Computer-Vision-Team-Amsterdam/AML-Interface.git", tag = "v1.1.5" }
 cvtoolkit = { git = "https://github.com/Computer-Vision-Team-Amsterdam/CVToolkit.git", tag = "v2.0.7" }
+torch = { index = "pytorch" }
+torchvision = { index = "pytorch" }
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu128"
 
 [tool.setuptools.packages.find]
 include=["aerial_image_detection"]
