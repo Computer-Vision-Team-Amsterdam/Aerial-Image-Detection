@@ -4,7 +4,7 @@ aml_experiment_details:
   experiment_name: "aerial_image_detection"
   compute_name: gpu-inference-cluster
   env_name: aerial_image_detection
-  env_version: 3
+  env_version: 6
   src_dir: "."
 
 inference:
