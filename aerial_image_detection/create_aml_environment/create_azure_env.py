@@ -5,7 +5,7 @@ from aerial_image_detection import settings
 
 def main():
     """
-    This file creates an AML environment.
+    This scripts creates an AML environment.
     """
     AMLInterface().create_aml_environment(
         env_name=settings["aml_experiment_details"]["env_name"],

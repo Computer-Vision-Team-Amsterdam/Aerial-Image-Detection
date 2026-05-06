@@ -13,6 +13,8 @@ aml_interface = AMLInterface()
 
 @pipeline()
 def inference_pipeline():
+    """AzureML pipeline to run aerial image detection."""
+
     input_datastore_path = aml_interface.get_datastore_full_path(
         settings["inference"]["input_folder"]["datastore"]
     )
@@ -52,6 +54,9 @@ def inference_pipeline():
 
 
 def main() -> None:
+    """
+    Script to submit the aerial image inference pipeline to AzureML.
+    """
     aml_interface.submit_pipeline_experiment(
         pipeline_function=inference_pipeline,
         experiment_name=settings["aml_experiment_details"]["experiment_name"],

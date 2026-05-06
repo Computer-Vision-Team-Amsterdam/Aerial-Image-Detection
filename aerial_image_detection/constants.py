@@ -1,6 +1,11 @@
+# CRS name for Rijksdriehoek coordinates
 RD_CRS = "EPSG:28992"
+
+# CRS name for LatLon coordinates
 WGS84_CRS = "EPSG:4326"
 
+# Default classes for YOLO OBB models, based on the DOTAv1 dataset
+# See https://captain-whu.github.io/DOTA/index.html
 OBB_CLASSES = {
     0: "plane",
     1: "ship",

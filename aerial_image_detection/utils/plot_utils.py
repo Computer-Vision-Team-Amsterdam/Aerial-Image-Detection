@@ -14,6 +14,9 @@ def plot_obb_boxes_on_image(
     single_color: Optional[Tuple[int, int, int]] = None,
     line_width: int = 1,
 ) -> npt.NDArray:
+    """
+    Plot YOLO OBB compatible bounding boxes on an image.
+    """
     if obb_names is None:
         obb_names = defaultdict(str)
 

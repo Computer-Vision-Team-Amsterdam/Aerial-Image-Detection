@@ -27,19 +27,18 @@ def run_inference(
     output_dir: Output(type=AssetTypes.URI_FOLDER),  # type: ignore # noqa: F821
 ):
     """
-    Run inference using a pretrained YOLO model on a chosen set of images.
+    AzureML command component to run aerial image inference using a pretrained
+    YOLO model folder of images in a blobstore.
 
     Parameters
     ----------
     inference_data_dir: Input(type=AssetTypes.URI_FOLDER)
-        Location of images to run inference on. The optional sub-folder
-        structure will be preserved in the output.
+        Location of images to run inference on. Folder is assumed to be 'flat',
+        i.e. no subfolders are scanned.
     model_weights_dir: Input(type=AssetTypes.URI_FOLDER)
         Location of the model weights.
     output_dir: Output(type=AssetTypes.URI_FOLDER)
-        Location where output will be stored. Depending on the config settings
-        this can be annotation labels as .txt files, images with blurred
-        sensitive classes and bounding boxes, or both.
+        Location where output will be stored.
     """
     logger.info("Starting inference step.")
 

@@ -9,7 +9,15 @@ from aerial_image_detection.constants import RD_CRS, WGS84_CRS
 
 class CityAreaHandler:
     """
-    Query the API for city area geometries and process the results.
+    Helper class that queries the data.amsterdam.nl API for city area geometries
+    and processes the results.
+
+    Usage
+    -----
+
+    ```
+        amsterdam_buurten_gdf = CityAreaHandler().get_city_area_gdf()
+    ```
     """
 
     def __init__(self) -> None:
@@ -17,10 +25,8 @@ class CityAreaHandler:
 
     def _query_and_process_stadsdelen(self):
         """
-        Query the API for city area geometries and process the results.
-
-        The function runs a query to fetch geometries for city areas and
-        converts them to a GeoPandas dataframe.
+        Query the API for 'buurten', 'wijken', 'stadsdelen' within Amsterdam and
+        join them into one GeoDataFrame.
         """
 
         buurten = self.query_gebieden_api(scale="buurten")
@@ -49,6 +55,19 @@ class CityAreaHandler:
 
     @classmethod
     def query_gebieden_api(cls, scale: str) -> gpd.GeoDataFrame:
+        """
+        Query the API for city area geometries of a given scale and process the
+        results.
+
+        Parameters
+        ----------
+        scale: str
+            One of: 'buurten', 'wijken', 'stadsdelen'.
+
+        Returns
+        -------
+        A GeoDataFRame with the city areas.
+        """
         if not (scale in ("buurten", "wijken", "stadsdelen")):
             raise ValueError(
                 "Argument `scale` expected to be one of `['buurten', 'wijken', 'stadsdelen']`, "
@@ -71,4 +90,5 @@ class CityAreaHandler:
             raise e
 
     def get_city_area_gdf(self) -> gpd.GeoDataFrame:
+        """Returns the gathered city areas as GeoDataFrame."""
         return self.city_area_gdf

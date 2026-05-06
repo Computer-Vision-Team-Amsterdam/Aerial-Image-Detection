@@ -10,6 +10,44 @@ from aerial_image_detection.constants import OBB_CLASSES
 
 
 class SAHIModel:
+    """
+    Wrapper around [SAHI](https://github.com/obss/sahi) for convenience.
+
+    Can be used to run sliced prediction and convert the results to [YOLO OBB
+    model](https://docs.ultralytics.com/tasks/obb/) bounding boxes.
+
+    Usage
+    -----
+    ```python
+    model = SAHIModel(...)
+    model.predict(image=...)
+    results = model.get_prediction_data()
+    ```
+
+    Parameters
+    ----------
+    yolo_model_weights_path: str
+        Path to YOLO OBB model weights.
+    confidence_treshold: float = 0.3
+        Confidence threshold for detection.
+    image_size: int = 1024
+        YOLO model input size.
+    device: str = "cpu"
+        Which device to run on: e.g. 'cpu' or 'cuda:0'
+    slice_height: Optional[int] = None
+        Height of SAHI slices, defaults to image_size.
+    slice_width: Optional[int] = None
+        Width of SAHI slices, defaults to image_size.
+    overlap_height_ratio: float = 0.1
+        Overlap of SAHI slices in height.
+    overlap_width_ratio: float = 0.1
+        Overlap of SAHI slices in width.
+    classes_to_keep: Optional[List[int]] = None
+        Which target classes to keep. Defaults to all.
+    class_agnostic: bool = False
+        Whether to be class agnostic (e.g. when only caring about 'vehicles',
+        classes for 'car' and 'truck' are treated as one).
+    """
 
     def __init__(
         self,
@@ -49,6 +87,19 @@ class SAHIModel:
         self.class_agnostic = class_agnostic
 
     def predict(self, image: npt.NDArray) -> PredictionResult:
+        """
+        Run sliced prediction on one image. Results will be returned and also
+        stored until the next call of `predict(...)`.
+
+        Parameters
+        ----------
+        image: npt.NDArray
+            Input image.
+
+        Returns
+        -------
+        An object of type sahi.predict.:class:`~sahi.predict.PredictionResult`.
+        """
         self.last_result = get_sliced_prediction(
             image,
             self.detection_model,
@@ -66,6 +117,28 @@ class SAHIModel:
         self,
         result: Optional[PredictionResult] = None,
     ) -> Dict[str, List]:
+        """
+        Converts the last (or given) :class:`~sahi.predict.PredictionResult` to
+        a format compatible with YOLO OBB.
+
+        Parameters
+        ----------
+        result: Optional[PredictionResult] = None
+            The :class:`~sahi.predict.PredictionResult` to convert. Defaults to
+            the results of the last call to `predict(...)`.
+
+        Returns
+        -------
+        A dict with converted results:
+
+        ```
+        {
+            "object_class": List[int] of predicted object classes,
+            "confidence": List[int] of prediction confidence scores,
+            "bounding_box": List[List] of prediction bounding boxes coordinates
+        }
+        ```
+        """
         result = result or self.last_result
 
         obb_cls = [int(pred.category.id) for pred in result.object_prediction_list]
@@ -87,10 +160,20 @@ class SAHIModel:
 
         return data
 
-    def get_names(self) -> Dict[int, str]:
-        return self.detection_model.names
-
     def get_number_of_slices_for_image(self, image: npt.NDArray) -> int:
+        """
+        Get the number of slices needed for a given image based on this
+        SAHIModel's configuration.
+
+        Parameters
+        ----------
+        image: npt.NDArray
+            The input image.
+
+        Returns
+        -------
+        The number of slices (int) that will be used for inference on this image.
+        """
         slice_boxes = get_slice_bboxes(
             image_height=image.shape[0],
             image_width=image.shape[1],
