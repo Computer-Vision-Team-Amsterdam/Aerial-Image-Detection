@@ -14,7 +14,7 @@ This code was developed with the goal to count vehicles, in particular those tha
 
 As such, the code is designed to work with Dutch public data sources, in particular:
 - Aerial imagery which can be downloaded from https://www.beeldmateriaal.nl/
-- [BGT](https://www.kadaster.nl/zakelijk/registraties/basisregistraties/bgt) topographical data (in particular parking bays and pedestrian zones). A [notebook](notebooks/download_bgt_data.ipynb) is provided to facilitate downloading the required data.
+- [BGT](https://www.kadaster.nl/zakelijk/registraties/basisregistraties/bgt) topographical data (in particular parking bays and pedestrian zones). This can be downloaded from [PDOK](https://www.pdok.nl/); a [notebook](notebooks/download_bgt_data.ipynb) is provided to facilitate downloading the required data.
 
 Some parts of the code are specific to the City of Amsterdam, in particular the [CityAreaHandler](aerial_image_detection/utils/city_area_handler.py). For use in a different city, this code should be adapted.
 
@@ -59,7 +59,7 @@ uv pip install -r pyproject.toml --extra dev
 
 ## Usage
 
-All configuration is done through the [config.yml](condig.yml) file. Adapt this to your needs.
+All configuration is done through the [config.yml](config.yml) file. Adapt this to your needs.
 
 ### 1. Run the detection pipeline
 
