@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aerial_image_detection"
-version = "0.1"
+version = "1.0"
 description = "Use computer vision models to detect objects in aerial imagery. "
 authors = [
     {name = "Daan Bloembergen", email = "d.bloembergen@amsterdam.nl"},
