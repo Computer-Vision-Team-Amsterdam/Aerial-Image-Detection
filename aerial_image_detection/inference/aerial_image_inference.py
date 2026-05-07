@@ -81,6 +81,8 @@ class AerialImageInference:
         self.output_folder = output_folder
         self.settings = inference_settings
 
+        os.makedirs(self.output_folder, exist_ok=True)
+
         self.sahi_model = self._setup_inference_model(model_path=model_path)
         self.target_polygon = self._parse_target_area()
         self.images_gdf = self._generate_image_gdf()
