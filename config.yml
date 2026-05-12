@@ -1,0 +1,46 @@
+customer: ""
+
+aml_experiment_details:
+  experiment_name: "aerial_image_detection"
+  compute_name: gpu-inference-cluster
+  env_name: aerial_image_detection
+  env_version: 6
+  src_dir: "."
+
+inference:
+  input_folder:
+    datastore: ""
+    inference_data_rel_path: ""
+  project_folder:
+    datastore: ""
+    output_rel_path: ""
+    model_weights_rel_path: ""
+  model_params:
+    model_name: "yolo11m-obb.pt"
+    device: "cuda:0"  # "cpu" or "cuda:0"
+    img_size: 1024
+    conf: 0.01
+  sahi_params:
+    model_type: "ultralytics"
+    slice_height: 1024
+    slice_width: 1024
+    overlap_height_ratio: 0.1
+    overlap_width_ratio: 0.1
+    postprocess_class_agnostic: true
+  target_area:
+    buurt: "Waterloopleinbuurt"
+    # wijk: "Nieuwmarkt/Lastage"
+    # stadsdeel: "Centrum"
+    # gemeente: "Amsterdam"
+  target_area_buffer: 10
+  target_classes: [9, 10]
+  target_classes_conf: null  # null means conf is taken from model_params
+
+logging:
+  loglevel_own: DEBUG  # override loglevel for packages defined in `own_packages`
+  own_packages: ["__main__", "aerial_image_detection"]
+  basic_config:
+    # log config as arguments to `logging.basicConfig`
+    level: WARNING
+    format: "%(asctime)s|||%(levelname)-8s|%(name)s|%(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
